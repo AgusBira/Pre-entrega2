@@ -7,17 +7,17 @@ function main(){
         {id: 1010 , nombre: "Cities: Skylines" ,precio: 80,stock:3,categoria:"simulacion"},
         {id: 1231 , nombre: "Doom Eternal" ,precio: 80,stock:3,categoria:"shooter"},
         {id: 1246 , nombre: "Farming Simulator 25" ,precio: 60,stock:3,categoria:"simulacion"},
-        {id: 1241 , nombre: "The Legend of Zelda: Tears of the Kingdom" ,precio: 120,stock:3,categoria:"tecnologia"}
+        {id: 1241 , nombre: "The Legend of Zelda: Tears of the Kingdom" ,precio: 120,stock:3,categoria:"aventura"}
         ]
-    let menu = Number(prompt("BIENVENIDO A LA TIENDA DE VIDEOJUEGOS\n"+ "-----------------------------------\n" + "Que le gustaria hacer??\n" + "1 - Comprar\n" + "2 - Salir"))
+    let categorias = ["Aventura","Shooter","Deportes","Simulacion"]
     let carrito = []
+    let menu = Number(prompt("BIENVENIDO A LA TIENDA DE VIDEOJUEGOS\n"+ "-----------------------------------\n" + "Que le gustaria hacer??\n" + "1 - Comprar\n" + "2 - Salir"))
     while (menu != 2) {
         if(menu === 1 ){
             let id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria"))   
             while (id !== 2){
                 agregarCarrito(juegos,id,carrito)
-                let nombresJuegos = carrito.map((juego) => {return[juego.nombre]})
-                id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria"))    
+                let nombresJuegos = carrito.map((juego) => {return[juego.nombre]})   
                 if(id === 1){
                     if(carrito.length === 0){
                         alert("No hay juegos en su carrito aun")
@@ -31,7 +31,11 @@ function main(){
                         prompt("SUS JUEGOS EN EL CARRITO SON:\n" + nombresJuegos.join("\n") + "\n"+"-----------------------------------\n" + "El total de su compra es: "+ "$" + precioTotal(carrito) +  "\n" + "-----------------------------------\n" + "Desea comprar??\n" + "1 - Comprar\n" + "2 - No comprar")
                     }
                     
+                }else if( id === 4){
+                    let catIngresada = prompt("Por cual categoria desea filtrar:\n" + categorias.join("\n")).toLocaleLowerCase()
+                    alert(filtrarCategorias(catIngresada,juegos).join("\n"))
                 }
+                id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria")) 
 
             }
         }
@@ -63,5 +67,17 @@ let precioTotal = (carrito) => {
         sumaTotal = sumaTotal + juego.precio
     })
     return sumaTotal
+}
+
+let filtrarCategorias = (catIngresada,juegos) =>{
+    juegosFiltrados = []
+    juegos.forEach((juego) => {
+        if (juego.categoria === catIngresada){
+            if(!juegosFiltrados.includes(juego.nombre)){
+                juegosFiltrados.push(juego.nombre)
+            }
+        }
+    })
+    return  juegosFiltrados
 }
 main()
