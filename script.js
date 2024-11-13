@@ -14,7 +14,7 @@ function main(){
     let menu = Number(prompt("BIENVENIDO A LA TIENDA DE VIDEOJUEGOS\n"+ "-----------------------------------\n" + "Que le gustaria hacer??\n" + "1 - Comprar\n" + "2 - Salir"))
     while (menu != 2) {
         if(menu === 1 ){
-            let id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria"))   
+            let id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"Unidades en el carrito: " + carrito.length + "\n"+"-----------------------------------\n" +"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria"))   
             while (id !== 2){
                 agregarCarrito(juegos,id,carrito)
                 let nombresJuegos = carrito.map((juego) => {return[juego.nombre]})   
@@ -26,25 +26,32 @@ function main(){
                     }
                 }else if(id === 3){
                     if(carrito.length === 0){
-                        alert("Su carrito")
+                        alert("Su carrito esta vacio")
                     }else{
-                        prompt("SUS JUEGOS EN EL CARRITO SON:\n" + nombresJuegos.join("\n") + "\n"+"-----------------------------------\n" + "El total de su compra es: "+ "$" + precioTotal(carrito) +  "\n" + "-----------------------------------\n" + "Desea comprar??\n" + "1 - Comprar\n" + "2 - No comprar")
+                         let compra = Number(prompt("SUS JUEGOS EN EL CARRITO SON:\n" + nombresJuegos.join("\n") + "\n"+"-----------------------------------\n" + "El total de su compra es: "+ "$" + precioTotal(carrito) +  "\n" + "-----------------------------------\n" + "Desea comprar??\n" + "1 - Comprar\n" + "2 - No comprar"))
+                         if(compra === 1){
+                            alert("Gracias por elegirnos!!")
+                            carrito = []
+                         }
+                    }
+                }else if( id === 4){
+                    let catIngresada = prompt("Por cual categoria desea filtrar:\n" + categorias.join("\n") +"\n"+ "2 - Salir").toLocaleLowerCase()
+                    if (catIngresada != 2){
+                        alert(filtrarCategorias(catIngresada,juegos).join("\n"))
                     }
                     
-                }else if( id === 4){
-                    let catIngresada = prompt("Por cual categoria desea filtrar:\n" + categorias.join("\n")).toLocaleLowerCase()
-                    alert(filtrarCategorias(catIngresada,juegos).join("\n"))
                 }
-                id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria")) 
+                id = Number(prompt("SELECCIONE EL JUEGO QUE DESEA COMPRAR POR ID:\n" +  "-----------------------------------\n" + mostrarJuegos(juegos)+ "\n" +"-----------------------------------\n"+"Unidades en el carrito: " + carrito.length + "\n"+"-----------------------------------\n" +"1 - Ver carrito\n" + "2 - Salir\n" + "3 - Comprar\n" + "4 - Filtrar por categoria"))   
 
             }
         }
         menu = Number(prompt("BIENVENIDO A LA TIENDA DE VIDEOJUEGOS\n"+ "-----------------------------------\n" + "Que le gustaria hacer??\n" + "1 - Comprar\n" + "2 - Salir"))
     } 
+    
 }
 let mostrarJuegos = (juegos) =>{
     let filtro = juegos.map((juego) => {return[
-        juego.nombre + " " + "ID: "+juego.id 
+        juego.nombre + " " + "ID: "+juego.id + " (Stock: " + juego.stock+ ")"
     ]})
     return filtro.join("\n")
 }
@@ -70,14 +77,9 @@ let precioTotal = (carrito) => {
 }
 
 let filtrarCategorias = (catIngresada,juegos) =>{
-    juegosFiltrados = []
-    juegos.forEach((juego) => {
-        if (juego.categoria === catIngresada){
-            if(!juegosFiltrados.includes(juego.nombre)){
-                juegosFiltrados.push(juego.nombre)
-            }
-        }
-    })
-    return  juegosFiltrados
+    let juegosFiltrados = juegos.filter((juego) => juego.categoria === catIngresada )
+    let nombreJuegosFiltrados = juegosFiltrados.map((juego) => juego.nombre)
+    return nombreJuegosFiltrados
 }
 main()
+
