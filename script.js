@@ -12,6 +12,12 @@ function main(){
     let categorias = ["Aventura","Shooter","Deportes","Simulacion"]
     let carrito = []
     crearTarjetaJuegos(juegos)
+
+
+    let botonesAgregarProductos = document.getElementsByClassName("botonAgregarCarrito")
+    for (const boton of botonesAgregarProductos) {
+        boton.addEventListener("click",(e) => agregarJuegoCarrito(e,juegos,carrito))
+    }    
     
 
 
@@ -20,23 +26,46 @@ function main(){
 let crearTarjetaJuegos = (juegos) =>{
     let containerJuegos = document.getElementById("container-juegos")
     juegos.forEach((juego) =>{
+        let unidades = "Unidades: "+ juego.stock
+        if(juego.stock === 0){
+            unidades = "No hay stock"
+        }
         containerJuegos.innerHTML += `<div class = "container__juegos__tarjeta">
-            <img src=${juego.rutaimg} alt=${juego.nombre}>
-            <h2>${juego.nombre}</h2>
-            <p>${juego.console}</p>
-            <p>${juego.categoria.toUpperCase()}</p>
-            <p>$${juego.precio}</p>
+            <div class = "container__img"><img src=${juego.rutaimg} alt=${juego.nombre}></div>
+            <div class ="container__juegos__tarjeta__info">
+                <h2>${juego.nombre}</h2>
+                <p>${juego.console}</p>
+                <p>${unidades}</p>
+                <h3>$${juego.precio}</h3>
+            </div>
+            <div class = "container__juegos__tarjeta__botoncontainer"><button class = "botonAgregarCarrito" id =${juego.id}>Agregar al carrito</button></div>
         </div>`
     })
 
 }
-let mostrarJuegos = (juegos) =>{
-    let filtro = juegos.map((juego) => {return[
-        juego.nombre + " " + "ID: "+juego.id + " (Stock: " + juego.stock+ ")"
-    ]})
-    return filtro.join("\n")
+
+let agregarJuegoCarrito = (e,juegos,carrito) =>{
+    let id = Number(e.target.id)
+    let juegoOriginal = juegos.find((juego) => juego.id === id)
+    let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
+    if (indiceCarrito === -1){
+        carrito.push({
+            id: juegoOriginal.id,
+            nombre: juegoOriginal.nombre,
+            precio:juegoOriginal.precio,
+            unidades: 1
+
+        })
+    }else{
+        juegoOriginal.stock = juegoOriginal.stock - 1
+        if(juegoOriginal.stock !== 0){
+            carrito[indiceCarrito].unidades++
+        }
+    }
+    console.log(carrito)
 }
-let agregarCarrito = (juegos,id, carrito) =>{
+
+/* let agregarCarrito = (juegos,id, carrito) =>{
         if(juegos.some((juego) => juego.id === id)){
             juegos.forEach(juego => {
                 if(juego.id === id && juego.stock > 0){
@@ -60,5 +89,5 @@ let filtrarCategorias = (catIngresada,juegos) =>{
     let juegosFiltrados = juegos.filter((juego) => juego.categoria === catIngresada )
     let nombreJuegosFiltrados = juegosFiltrados.map((juego) => juego.nombre)
     return nombreJuegosFiltrados
-}
+} */
 main()
