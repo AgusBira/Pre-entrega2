@@ -6,9 +6,24 @@
     font-family: "Roboto", serif;
     font-style: normal;
 }
-.navnuevocolor{
+nav{
+    padding: 20px;
     background-color: #9356A0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
+nav a{
+    text-decoration: none;
+    color: black;
+}
+nav button{
+    border: none;
+    background-color: #724C9D;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .container__juegos{
     background-color: #724C9D;
     padding: 20px;
@@ -72,6 +87,19 @@
 }
 .container__juegos__tarjeta__info h2{
     font-size:20px;
+}
+
+#carrito{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    border: 2px solid black;
+    
+}
+.tarjeta-carrito{
+   display: flex;
+   color: black;
 }
 
 footer{

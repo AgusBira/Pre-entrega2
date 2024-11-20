@@ -12,16 +12,13 @@ function main(){
     let categorias = ["Aventura","Shooter","Deportes","Simulacion"]
     let carrito = []
     crearTarjetaJuegos(juegos)
-
+    
 
     let botonesAgregarProductos = document.getElementsByClassName("botonAgregarCarrito")
     for (const boton of botonesAgregarProductos) {
         boton.addEventListener("click",(e) => agregarJuegoCarrito(e,juegos,carrito))
     }    
     
-
-
-
 }
 let crearTarjetaJuegos = (juegos) =>{
     let containerJuegos = document.getElementById("container-juegos")
@@ -43,7 +40,6 @@ let crearTarjetaJuegos = (juegos) =>{
     })
 
 }
-
 let agregarJuegoCarrito = (e,juegos,carrito) =>{
     let id = Number(e.target.id)
     let juegoOriginal = juegos.find((juego) => juego.id === id)
@@ -62,9 +58,30 @@ let agregarJuegoCarrito = (e,juegos,carrito) =>{
             carrito[indiceCarrito].unidades++
         }
     }
-    console.log(carrito)
+    renderizarCarrito(carrito)
+    contadorCarrito(carrito)
 }
-
+let renderizarCarrito = (carrito) => {
+    let contendor = document.getElementById("carrito")
+    contendor.innerHTML = ""
+    carrito.forEach((juego)=>{
+        let tarjetaCarrito = document.createElement("div")
+        tarjetaCarrito.className = "tarjeta-carrito"
+        tarjetaCarrito.innerHTML = `
+        <p>${juego.nombre}</p>
+        <p>${juego.id}</p>
+        <p>${juego.unidades}</p>
+        <p>${juego.precio}</p>
+        `
+        contendor.appendChild(tarjetaCarrito)
+    })
+    
+}
+let contadorCarrito = (carrito) =>{
+    let botonCarrito = document.getElementById("botonCarrito")
+    botonCarrito.innerHTML = "Carrito"
+    botonCarrito.innerHTML += `: ${carrito.length}`
+}
 /* let agregarCarrito = (juegos,id, carrito) =>{
         if(juegos.some((juego) => juego.id === id)){
             juegos.forEach(juego => {
