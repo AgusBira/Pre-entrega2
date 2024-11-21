@@ -18,7 +18,11 @@ function main(){
     for (const boton of botonesAgregarProductos) {
         boton.addEventListener("click",(e) => agregarJuegoCarrito(e,juegos,carrito))
     }    
-    
+    let botonCarrito = document.getElementById("botonCarrito")
+    botonCarrito.addEventListener("click",mostrarCarrito)
+
+    let botonHome = document.getElementById("botonHome")
+    botonHome.addEventListener("click",volverAHome)
 }
 let crearTarjetaJuegos = (juegos) =>{
     let containerJuegos = document.getElementById("container-juegos")
@@ -81,6 +85,21 @@ let contadorCarrito = (carrito) =>{
     let botonCarrito = document.getElementById("botonCarrito")
     botonCarrito.innerHTML = "Carrito"
     botonCarrito.innerHTML += `: ${carrito.length}`
+}
+
+
+let mostrarCarrito = () =>{
+    let carrito = document.getElementById("carrito")
+    let containerJuegos = document.getElementById("container-juegos")
+    carrito.className = "container__carrito"
+    containerJuegos.className = "oculta"
+}
+
+let volverAHome = () => {
+    let carrito = document.getElementById("carrito")
+    let containerJuegos = document.getElementById("container-juegos")
+    carrito.className = "oculta"
+    containerJuegos.className = "container__juegos  "
 }
 /* let agregarCarrito = (juegos,id, carrito) =>{
         if(juegos.some((juego) => juego.id === id)){

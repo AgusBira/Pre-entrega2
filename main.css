@@ -6,6 +6,7 @@
     font-family: "Roboto", serif;
     font-style: normal;
 }
+
 nav{
     padding: 20px;
     background-color: #9356A0;
@@ -19,6 +20,11 @@ nav a{
 }
 nav button{
     border: none;
+    background-color: #724C9D;
+    padding: 10px;
+    border-radius: 10px;
+}
+nav .nav__buscador{
     background-color: #724C9D;
     padding: 10px;
     border-radius: 10px;
@@ -105,4 +111,7 @@ nav button{
 footer{
     text-align: center;
     background-color: #0B0205;
+}
+.oculta{
+    display: none !important;
 }
