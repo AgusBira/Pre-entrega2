@@ -12,12 +12,22 @@
   <nav>
     <h1>Videogames</h1>
     <button id="botonHome">Home</button>
-    <button id="botonCarrito">Carrito</button>
-    <div class="nav__buscador">
-      <label for="">Buscar:</label>
-      <input type="text">
+    <button id="botonCarrito"><img src="img/cart.svg" alt=""></button>
+    <div class="nav__contenedor">
+      <div class="nav__buscador">
+        <button class="nav__buscador__boton">Buscar</button>
+        <input type="text">
+      </div class ="nav__filtro">
+      <select name="categorias" id="filtroCategorias">
+        <option value="aventura">Aventura</option>
+        <option value="shooter">Shooter</option>
+        <option value="simulacion">Simulacion</option>
+        <option value="deportes">Deportes</option>
+      </select>
     </div>
   </nav>
+
+
       <div id="container-juegos" class="container__juegos">
 
         
