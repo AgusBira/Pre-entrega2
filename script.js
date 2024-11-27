@@ -102,6 +102,7 @@ let filtroCategorias = (e,juegos) => {
 }
 let crearTarjetaJuegos = (juegos) => {
     let containerJuegos = document.getElementById("container-juegos")
+    containerJuegos.innerHTML =""
     juegos.forEach((juego) => {
         let unidades = "Unidades: " + juego.stock
         if (juego.stock === 0) {
