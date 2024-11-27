@@ -50,13 +50,13 @@ let agregarJuegoCarrito = (e, juegos, carrito) => {
             carrito[indiceCarrito].unidades++
         }
     }
+    console.log(carrito)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
 }
 let renderizarCarrito = (carrito) => {
     let contendor = document.getElementById("carrito")
     contendor.innerHTML = ""
-    carrito = []
     carrito.forEach((juego) => {
         let tarjetaCarrito = document.createElement("div")
         tarjetaCarrito.className = "tarjeta-carrito"
