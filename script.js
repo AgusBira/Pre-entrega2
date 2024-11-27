@@ -10,28 +10,32 @@ function main() {
         { id: 1241, nombre: "The Legend of Zelda: Tears of the Kingdom", precio: 120, stock: 3, categoria: "aventura", console: "Nintendo Switch", rutaimg: "img/tlozbotw.jpeg" }
     ]
     let carrito = []
-    crearTarjetaJuegos(juegos)
-    let botonesAgregarJuego = document.getElementsByClassName("botonAgregarCarrito")
+    crearTarjetaJuegos(juegos,carrito)
+    /* let botonesAgregarJuego = document.getElementsByClassName("botonAgregarCarrito")
     for (const boton of botonesAgregarJuego) {
         boton.addEventListener("click", (e) => agregarJuegoCarrito(e, juegos, carrito))
-    }
-    let botonCarrito = document.getElementById("botonCarrito")
-    botonCarrito.addEventListener("click", mostrarCarrito)
-
+    } */
     let botonHome = document.getElementById("botonHome")
     botonHome.addEventListener("click", volverAHome)
 
-    let botonEliminarDelCarrito = document.getElementsByClassName("botonEliminarDelCarrito")
-    for (const boton of botonEliminarDelCarrito) {
-        boton.addEventListener("click", (e) => eliminarDelCarrito(e, carrito))
-    }
+    let botonCarrito = document.getElementById("botonCarrito")
+    botonCarrito.addEventListener("click", mostrarCarrito)
+    
+    let inputBuscar = document.getElementById("inputBuscar")
+    inputBuscar.addEventListener("input",(e) => buscador(e,juegos))
+    
     let selectorCategorias = document.getElementById("filtroCategorias")
-    selectorCategorias.addEventListener("change",(e) => filtroCategorias(e,juegos))
+    selectorCategorias.addEventListener("change",(e) => filtroCategorias(e,juegos,carrito))
 }
 
 
+let buscador = (e,juegos) =>{
+    let juegosFiltrados = juegos.filter(juego => juego.nombre.includes(e.target.value))
+    crearTarjetaJuegos(juegosFiltrados,carrito)
+}
+
 let agregarJuegoCarrito = (e, juegos, carrito) => {
-    let id = Number(e.target.id)
+    let id = Number(e.target.id.substring(3))
     let juegoOriginal = juegos.find((juego) => juego.id === id)
     let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
     if (indiceCarrito === -1) {
@@ -50,9 +54,9 @@ let agregarJuegoCarrito = (e, juegos, carrito) => {
             carrito[indiceCarrito].unidades++
         }
     }
-    console.log(carrito)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
+    
 }
 let renderizarCarrito = (carrito) => {
     let contendor = document.getElementById("carrito")
@@ -68,9 +72,12 @@ let renderizarCarrito = (carrito) => {
         <p>${juego.id}</p>
         <p>${juego.unidades}</p>
         <p>$${juego.precio}</p>
-        <button id = ${juego.id} class = "botonEliminarDelCarrito"><img src="img/trash.svg" alt=""></button>
+        <button id = eli${juego.id} class = "botonEliminarDelCarrito"><img src="img/trash.svg" alt=""></button>
         `
         contendor.appendChild(tarjetaCarrito)
+
+        let botonEleiminarDelCarrito = document.getElementById("eli" + juego.id)
+        botonEleiminarDelCarrito.addEventListener("click",(e)=>eliminarDelCarrito(e,carrito))
     })
 }
 let contadorCarrito = (carrito) => {
@@ -91,16 +98,20 @@ let volverAHome = () => {
     carrito.className = "oculta"
     containerJuegos.className = "container__juegos  "
 }
-let eliminarDelCarrito = () => {
-    console.dir(e.target.id)
+let eliminarDelCarrito = (e,carrito) => {
+    id = Number(e.target.id.substring(3))
+    indice = carrito.findIndex((juego) => juego.id === id)
+    carrito.splice(indice, 1); // Elimina el juego del carrito
+    renderizarCarrito(carrito); // Vuelve a renderizar el carrito
+    contadorCarrito(carrito); // Actualiza el contador del carrito
 }
-let filtroCategorias = (e,juegos) => {
+let filtroCategorias = (e,juegos,carrito) => {
     let categoria = e.target.value
-    let JuegosFiltrados = juegos.filter((juego) => juego.categoria === categoria)
-    console.log(JuegosFiltrados)
-    crearTarjetaJuegos(JuegosFiltrados)
-}
-let crearTarjetaJuegos = (juegos) => {
+    let juegosFiltrados = categoria !== "all" ? juegos.filter((juego) => juego.categoria === categoria) : juegos
+    crearTarjetaJuegos(juegosFiltrados,carrito)
+    
+}      
+let crearTarjetaJuegos = (juegos,carrito) => {
     let containerJuegos = document.getElementById("container-juegos")
     containerJuegos.innerHTML =""
     juegos.forEach((juego) => {
@@ -120,9 +131,12 @@ let crearTarjetaJuegos = (juegos) => {
                 <p>${unidades}</p>
                 <h3>$${juego.precio}</h3>
             </div>
-            <div class = "container__juegos__tarjeta__botoncontainer"><button class = "botonAgregarCarrito" id =${juego.id}>Agregar al carrito</button></div>
+            <div class = "container__juegos__tarjeta__botoncontainer"><button class = "botonAgregarCarrito" id = agc${juego.id}>Agregar al carrito</button></div>
             `
-        containerJuegos.appendChild(contenedainerJuegosTarjeta)        
+        containerJuegos.appendChild(contenedainerJuegosTarjeta) 
+        
+        let botonAgregarCarrito = document.getElementById("agc"+juego.id)
+        botonAgregarCarrito.addEventListener("click",(e) =>agregarJuegoCarrito(e,juegos,carrito))
     })
 }
 main()

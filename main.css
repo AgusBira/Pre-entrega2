@@ -32,7 +32,15 @@ nav button{
     justify-content: center;
     align-items: center;
 }
-
+.buscar:hover {
+    transition: 200ms;
+    transform: scale(1.05);
+}
+.buscar:active {
+    transition: 200ms;
+    transform: scale(1);
+    border: 2px solid;
+}
 nav .nav__buscador{
     background-color: #724C9D;
     padding: 10px;
@@ -78,11 +86,11 @@ nav .nav__buscador .nav__buscador__boton{
     border: none;
     padding: 10px;
     border-radius: 10px;
-    transition: 300ms;
+    transition: 100ms;
 }
 
 .container__juegos__tarjeta button:hover{
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 .container__juegos__tarjeta button:active{
     transform: scale(1);
@@ -139,7 +147,25 @@ nav .nav__buscador .nav__buscador__boton{
 .tarjeta-carrito-nombre img{
     height: 100%;
 }
+.botonEliminarDelCarrito{
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color:#724C9D ;
+    transition: 200ms;
+}
 
+.botonEliminarDelCarrito:hover{
+    border:  1px solid black;
+    transform: scale(1.1);
+}
+.botonEliminarDelCarrito:active{
+    background-color: red;
+    transform: scale(0.9);
+}
+.botonEliminarDelCarrito img{
+    width: 60%;
+}
 footer{
     text-align: center;
     background-color: #0B0205;
