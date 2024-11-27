@@ -15,8 +15,8 @@
     <button id="botonCarrito"><img src="img/cart.svg" alt=""></button>
     <div class="nav__contenedor">
       <div class="nav__buscador">
-        <button class="nav__buscador__boton">Buscar</button>
-        <input type="text">
+        <button class="nav__buscador__boton" id="botonBuscar">Buscar</button>
+        <input type="text" id="inputBuscar">
       </div class ="nav__filtro">
       <select name="categorias" id="filtroCategorias">
         <option value="aventura">Aventura</option>
@@ -24,16 +24,13 @@
         <option value="simulacion">Simulacion</option>
         <option value="deportes">Deportes</option>
       </select>
+      <button id="botonVaciarCarrito">Vaciar<img src="img/cart.svg" alt=""></button>
     </div>
   </nav>
 
 
-      <div id="container-juegos" class="container__juegos">
-
-        
-        
-      </div>
-      <div id ="carrito" class="oculta"></div>
+      <div id="container-juegos" class="container__juegos"></div>
+      <div id ="carrito" class="oculta"> </div>
       
       <footer>Todos los derechos reservados</footer>
     <script src="script.js"></script>

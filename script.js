@@ -9,9 +9,7 @@ function main() {
         { id: 1246, nombre: "Farming Simulator 25", precio: 60, stock: 3, categoria: "simulacion", console: "PC/PS5/XBOX", rutaimg: "img/farmsimulator25.jpg" },
         { id: 1241, nombre: "The Legend of Zelda: Tears of the Kingdom", precio: 120, stock: 3, categoria: "aventura", console: "Nintendo Switch", rutaimg: "img/tlozbotw.jpeg" }
     ]
-    let carrito = obtenerCarritoDelStorage("carrito")
-    renderizarCarrito(carrito)
-    contadorCarrito(carrito)
+    let carrito = []
     crearTarjetaJuegos(juegos)
     let botonesAgregarJuego = document.getElementsByClassName("botonAgregarCarrito")
     for (const boton of botonesAgregarJuego) {
@@ -52,23 +50,13 @@ let agregarJuegoCarrito = (e, juegos, carrito) => {
             carrito[indiceCarrito].unidades++
         }
     }
-    guardarCarritoStorage(carrito)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
-}
-let guardarCarritoStorage = (carrito) =>{
-    carritoJson = JSON.stringify(carrito)
-    localStorage.setItem("carrito",carritoJson)
-}
-let obtenerCarritoDelStorage = (clave) =>{
-    carritoJson = localStorage.getItem(clave)
-    carrito = JSON.parse(carritoJson)
-    return carrito
 }
 let renderizarCarrito = (carrito) => {
     let contendor = document.getElementById("carrito")
     contendor.innerHTML = ""
-    carrito = obtenerCarritoDelStorage("carrito")
+    carrito = []
     carrito.forEach((juego) => {
         let tarjetaCarrito = document.createElement("div")
         tarjetaCarrito.className = "tarjeta-carrito"
