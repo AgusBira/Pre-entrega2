@@ -9,12 +9,10 @@ function main() {
         { id: 1246, nombre: "Farming Simulator 25", precio: 60, stock: 3, categoria: "simulacion", console: "PC/PS5/XBOX", rutaimg: "img/farmsimulator25.jpg" },
         { id: 1241, nombre: "The Legend of Zelda: Tears of the Kingdom", precio: 120, stock: 3, categoria: "aventura", console: "Nintendo Switch", rutaimg: "img/tlozbotw.jpeg" }
     ]
-    let carrito = []
+    let carrito = obtenerCarritoDelStorage()
+    renderizarCarrito(carrito)
     crearTarjetaJuegos(juegos,carrito)
-    /* let botonesAgregarJuego = document.getElementsByClassName("botonAgregarCarrito")
-    for (const boton of botonesAgregarJuego) {
-        boton.addEventListener("click", (e) => agregarJuegoCarrito(e, juegos, carrito))
-    } */
+
     let botonHome = document.getElementById("botonHome")
     botonHome.addEventListener("click", volverAHome)
 
@@ -26,15 +24,33 @@ function main() {
     
     let selectorCategorias = document.getElementById("filtroCategorias")
     selectorCategorias.addEventListener("change",(e) => filtroCategorias(e,juegos,carrito))
+    
+    let botonVaciarCarrito = document.getElementById("botonVaciarCarrito")
+    botonVaciarCarrito.addEventListener("click",vaciarCarrito)
+}
+let vaciarCarrito = (e) =>{
+    localStorage.removeItem("carrito")
+    carrito = obtenerCarritoDelStorage()
+    renderizarCarrito(carrito)
+    contadorCarrito(carrito)
 }
 
-
+let guardarCarritoEnStorage = (carrito) =>{
+    let carritoJson = JSON.stringify(carrito)
+    localStorage.setItem("carrito",carritoJson)
+}
+let obtenerCarritoDelStorage = () =>{
+    let carritoJson = localStorage.getItem("carrito")
+    let carrito = carritoJson ? JSON.parse(carritoJson):[]
+    return carrito
+}
 let buscador = (e,juegos) =>{
     let juegosFiltrados = juegos.filter(juego => juego.nombre.includes(e.target.value))
     crearTarjetaJuegos(juegosFiltrados,carrito)
 }
 
-let agregarJuegoCarrito = (e, juegos, carrito) => {
+let agregarJuegoCarrito = (e, juegos) => {
+    let carrito = obtenerCarritoDelStorage()
     let id = Number(e.target.id.substring(3))
     let juegoOriginal = juegos.find((juego) => juego.id === id)
     let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
@@ -54,6 +70,7 @@ let agregarJuegoCarrito = (e, juegos, carrito) => {
             carrito[indiceCarrito].unidades++
         }
     }
+    guardarCarritoEnStorage(carrito)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
     
@@ -77,7 +94,7 @@ let renderizarCarrito = (carrito) => {
         contendor.appendChild(tarjetaCarrito)
 
         let botonEleiminarDelCarrito = document.getElementById("eli" + juego.id)
-        botonEleiminarDelCarrito.addEventListener("click",(e)=>eliminarDelCarrito(e,carrito))
+        botonEleiminarDelCarrito.addEventListener("click",(e)=>eliminarDelCarrito(e))
     })
 }
 let contadorCarrito = (carrito) => {
@@ -98,16 +115,20 @@ let volverAHome = () => {
     carrito.className = "oculta"
     containerJuegos.className = "container__juegos  "
 }
-let eliminarDelCarrito = (e,carrito) => {
+let eliminarDelCarrito = (e) => {
+    let carrito = obtenerCarritoDelStorage()
     id = Number(e.target.id.substring(3))
     indice = carrito.findIndex((juego) => juego.id === id)
-    carrito.splice(indice, 1); // Elimina el juego del carrito
-    renderizarCarrito(carrito); // Vuelve a renderizar el carrito
-    contadorCarrito(carrito); // Actualiza el contador del carrito
+    carrito.splice(indice, 1)
+    guardarCarritoEnStorage(carrito)
+    renderizarCarrito(carrito)
+    contadorCarrito(carrito)
+    
+    
 }
 let filtroCategorias = (e,juegos,carrito) => {
     let categoria = e.target.value
-    let juegosFiltrados = categoria !== "all" ? juegos.filter((juego) => juego.categoria === categoria) : juegos
+    let juegosFiltrados = categoria !== "todos" ? juegos.filter((juego) => juego.categoria === categoria) : juegos
     crearTarjetaJuegos(juegosFiltrados,carrito)
     
 }      

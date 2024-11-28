@@ -82,7 +82,7 @@ nav .nav__buscador .nav__buscador__boton{
     border-radius: 10px;
 }
 .container__juegos__tarjeta button{
-    background-color: #DCCAE9;
+    background-color: #d9b0f6;
     border: none;
     padding: 10px;
     border-radius: 10px;
@@ -94,6 +94,7 @@ nav .nav__buscador .nav__buscador__boton{
 }
 .container__juegos__tarjeta button:active{
     transform: scale(1);
+    background-color: #ffffff;
 }
 .container__juegos__tarjeta__info{
     color: white;
