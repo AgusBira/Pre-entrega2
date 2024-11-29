@@ -54,20 +54,31 @@ let agregarJuegoCarrito = (e, juegos) => {
     let id = Number(e.target.id.substring(3))
     let juegoOriginal = juegos.find((juego) => juego.id === id)
     let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
+    let unidadesTarjeta = document.getElementById("uni"+id)
     if (indiceCarrito === -1) {
         carrito.push({
             id: juegoOriginal.id,
             nombre: juegoOriginal.nombre,
             precio: juegoOriginal.precio,
             unidades: 1,
-            rutaimg: juegoOriginal.rutaimg
-
+            rutaimg: juegoOriginal.rutaimg,
+            stock: juegoOriginal.stock
         })
-    } else {
-
         juegoOriginal.stock--
-        if (juegoOriginal.stock !== 0) {
+        console.log(juegoOriginal.stock)
+        unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
+    } else {
+        juegoOriginal.stock--
+        console.log(juegoOriginal.stock)
+        if (juegoOriginal.stock > 0) {
             carrito[indiceCarrito].unidades++
+            unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
+        }else{
+            if(juegoOriginal.stock === 0){
+                carrito[indiceCarrito].unidades++
+                unidadesTarjeta.innerHTML = `No hay stock`
+            }
+            
         }
     }
     guardarCarritoEnStorage(carrito)
@@ -136,10 +147,6 @@ let crearTarjetaJuegos = (juegos,carrito) => {
     let containerJuegos = document.getElementById("container-juegos")
     containerJuegos.innerHTML =""
     juegos.forEach((juego) => {
-        let unidades = "Unidades: " + juego.stock
-        if (juego.stock === 0) {
-            unidades = "No hay stock"
-        }
         let contenedainerJuegosTarjeta = document.createElement("div")
         contenedainerJuegosTarjeta.className = "container__juegos__tarjeta"
         contenedainerJuegosTarjeta.innerHTML += `
@@ -149,7 +156,7 @@ let crearTarjetaJuegos = (juegos,carrito) => {
             <div class ="container__juegos__tarjeta__info">
                 <h2>${juego.nombre}</h2>
                 <p>${juego.console}</p>
-                <p>${unidades}</p>
+                <p id= "uni${juego.id}">Unidades: ${juego.stock}</p>
                 <h3>$${juego.precio}</h3>
             </div>
             <div class = "container__juegos__tarjeta__botoncontainer"><button class = "botonAgregarCarrito" id = agc${juego.id}>Agregar al carrito</button></div>
