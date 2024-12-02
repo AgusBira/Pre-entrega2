@@ -151,21 +151,21 @@ let contadorCarrito = () => {
     botonCarrito.innerHTML += `${carrito.length}`
 }
 let mostrarCarrito = () => {
-    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
+    let contenedorFinalizar = document.getElementById("contenedor-finalizar")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "container__carrito"
-    botonFinalizarCompra.className = "boton-finalizar-compra"
+    contenedorFinalizar.className = "contenedor-botonFinalizarCompra"
     containerJuegos.className = "oculta"
 
 }
 let volverAHome = () => {
-    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
+    let contenedorFinalizar = document.getElementById("contenedor-finalizar")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "oculta"
     containerJuegos.className = "container__juegos  "
-    botonFinalizarCompra.className = "oculta"
+    contenedorFinalizar.className = "oculta"
 }
 let eliminarDelCarrito = (e) => {
     let carrito = obtenerCarritoDelStorage()
@@ -200,7 +200,7 @@ let crearTarjetaJuegos = (juegos, carrito) => {
             <div class ="container__juegos__tarjeta__info">
                 <h2>${juego.nombre}</h2>
                 <p>${juego.console}</p>
-                <p id= "uni${juego.id}">Unidades: ${juego.stock}</p>
+
                 <h3>$${juego.precio}</h3>
             </div>
             <div class = "container__juegos__tarjeta__botoncontainer"><button class = "botonAgregarCarrito" id = agc${juego.id}>Agregar al carrito</button></div>
