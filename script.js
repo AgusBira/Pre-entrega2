@@ -95,17 +95,17 @@ let agregarJuegoCarrito = (e, juegos) => {
         })
         juegoOriginal.stock--
         console.log(juegoOriginal.stock)
-        unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
+        //unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
     } else {
         juegoOriginal.stock--
         console.log(juegoOriginal.stock)
         if (juegoOriginal.stock > 0) {
             carrito[indiceCarrito].unidades++
-            unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
+            //unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
         } else {
             if (juegoOriginal.stock === 0) {
                 carrito[indiceCarrito].unidades++
-                unidadesTarjeta.innerHTML = `No hay stock`
+                //unidadesTarjeta.innerHTML = `No hay stock`
             }
 
         }
@@ -160,12 +160,12 @@ let mostrarCarrito = () => {
 
 }
 let volverAHome = () => {
-    let contenedorFinalizar = document.getElementById("contenedor-finalizar")
+    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "oculta"
     containerJuegos.className = "container__juegos  "
-    contenedorFinalizar.className = "oculta"
+    botonFinalizarCompra.className = "oculta"
 }
 let eliminarDelCarrito = (e) => {
     let carrito = obtenerCarritoDelStorage()
