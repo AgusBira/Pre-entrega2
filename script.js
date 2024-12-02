@@ -11,42 +11,70 @@ function main() {
     ]
     let carrito = obtenerCarritoDelStorage()
     renderizarCarrito(carrito)
-    crearTarjetaJuegos(juegos,carrito)
-
+    crearTarjetaJuegos(juegos, carrito)
+    contadorCarrito()
     let botonHome = document.getElementById("botonHome")
     botonHome.addEventListener("click", volverAHome)
 
     let botonCarrito = document.getElementById("botonCarrito")
     botonCarrito.addEventListener("click", mostrarCarrito)
-    
+
     let inputBuscar = document.getElementById("inputBuscar")
-    inputBuscar.addEventListener("input",(e) => buscador(e,juegos))
-    
+    inputBuscar.addEventListener("input", (e) => buscador(e, juegos))
+
     let selectorCategorias = document.getElementById("filtroCategorias")
-    selectorCategorias.addEventListener("change",(e) => filtroCategorias(e,juegos,carrito))
-    
+    selectorCategorias.addEventListener("change", (e) => filtroCategorias(e, juegos, carrito))
+
     let botonVaciarCarrito = document.getElementById("botonVaciarCarrito")
-    botonVaciarCarrito.addEventListener("click",vaciarCarrito)
+    botonVaciarCarrito.addEventListener("click", vaciarCarrito)
+
+    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
+    botonFinalizarCompra.addEventListener("click", finalizarCompra)
+
+
 }
-let vaciarCarrito = (e) =>{
+let precioFinalCarrito = (carrito) => {
+    if (carrito.length != 0) {
+        arrayPrecios = carrito.map((juego) => juego.precio)
+        precioTotal = arrayPrecios.reduce((acum, precio) => acum + precio, 0)
+    } else {
+        precioTotal = 0
+    }
+    return precioTotal
+
+}
+
+let finalizarCompra = () => {
+    let precioFinal = document.getElementById("precioFinal")
+    localStorage.removeItem("carrito")
+    let carrito = obtenerCarritoDelStorage()
+    alert("Gracias por su compra, hasta luego!!")
+    renderizarCarrito(carrito)
+    contadorCarrito(carrito)
+    guardarCarritoEnStorage(carrito)
+    precioFinal.innerHTML = "Precio final: " + "$  " + 0
+}
+let vaciarCarrito = (e) => {
+    let precioFinal = document.getElementById("precioFinal")
     localStorage.removeItem("carrito")
     carrito = obtenerCarritoDelStorage()
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
+    precioFinal.innerHTML = "Precio final: " + "$  " + 0
 }
 
-let guardarCarritoEnStorage = (carrito) =>{
+let guardarCarritoEnStorage = (carrito) => {
     let carritoJson = JSON.stringify(carrito)
-    localStorage.setItem("carrito",carritoJson)
+    localStorage.setItem("carrito", carritoJson)
 }
-let obtenerCarritoDelStorage = () =>{
+let obtenerCarritoDelStorage = () => {
     let carritoJson = localStorage.getItem("carrito")
-    let carrito = carritoJson ? JSON.parse(carritoJson):[]
+    let carrito = carritoJson ? JSON.parse(carritoJson) : []
     return carrito
 }
-let buscador = (e,juegos) =>{
+let buscador = (e, juegos) => {
     let juegosFiltrados = juegos.filter(juego => juego.nombre.includes(e.target.value))
-    crearTarjetaJuegos(juegosFiltrados,carrito)
+    crearTarjetaJuegos(juegosFiltrados, carrito)
 }
 
 let agregarJuegoCarrito = (e, juegos) => {
@@ -54,7 +82,8 @@ let agregarJuegoCarrito = (e, juegos) => {
     let id = Number(e.target.id.substring(3))
     let juegoOriginal = juegos.find((juego) => juego.id === id)
     let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
-    let unidadesTarjeta = document.getElementById("uni"+id)
+    let unidadesTarjeta = document.getElementById("uni" + id)
+
     if (indiceCarrito === -1) {
         carrito.push({
             id: juegoOriginal.id,
@@ -73,22 +102,26 @@ let agregarJuegoCarrito = (e, juegos) => {
         if (juegoOriginal.stock > 0) {
             carrito[indiceCarrito].unidades++
             unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
-        }else{
-            if(juegoOriginal.stock === 0){
+        } else {
+            if (juegoOriginal.stock === 0) {
                 carrito[indiceCarrito].unidades++
                 unidadesTarjeta.innerHTML = `No hay stock`
             }
-            
+
         }
     }
     guardarCarritoEnStorage(carrito)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
-    
+
 }
 let renderizarCarrito = (carrito) => {
     let contendor = document.getElementById("carrito")
+    let precioFinal = document.getElementById("precioFinal")
     contendor.innerHTML = ""
+    if (carrito.length === 0) {
+        contendor.innerHTML = "<h2>Su carrito esta vacio!</h2>"
+    }
     carrito.forEach((juego) => {
         let tarjetaCarrito = document.createElement("div")
         tarjetaCarrito.className = "tarjeta-carrito"
@@ -105,26 +138,34 @@ let renderizarCarrito = (carrito) => {
         contendor.appendChild(tarjetaCarrito)
 
         let botonEleiminarDelCarrito = document.getElementById("eli" + juego.id)
-        botonEleiminarDelCarrito.addEventListener("click",(e)=>eliminarDelCarrito(e))
+        botonEleiminarDelCarrito.addEventListener("click", (e) => eliminarDelCarrito(e))
+
+        let precioFinal = document.getElementById("precioFinal")
+        precioFinal.innerHTML = "Precio final: " + "$  " + precioFinalCarrito(carrito)
     })
 }
-let contadorCarrito = (carrito) => {
+let contadorCarrito = () => {
+    let carrito = obtenerCarritoDelStorage("carrito")
     let botonCarrito = document.getElementById("botonCarrito")
     botonCarrito.innerHTML = `<img src="img/cart.svg" alt="">`
     botonCarrito.innerHTML += `${carrito.length}`
 }
 let mostrarCarrito = () => {
+    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "container__carrito"
+    botonFinalizarCompra.className = "boton-finalizar-compra"
     containerJuegos.className = "oculta"
 
 }
 let volverAHome = () => {
+    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "oculta"
     containerJuegos.className = "container__juegos  "
+    botonFinalizarCompra.className = "oculta"
 }
 let eliminarDelCarrito = (e) => {
     let carrito = obtenerCarritoDelStorage()
@@ -134,18 +175,21 @@ let eliminarDelCarrito = (e) => {
     guardarCarritoEnStorage(carrito)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
-    
-    
+    if (carrito.length === 0) {
+        let precioFinal = document.getElementById("precioFinal")
+        precioFinal.innerHTML = "Precio final: " + "$  " + 0
+    }
+
 }
-let filtroCategorias = (e,juegos,carrito) => {
+let filtroCategorias = (e, juegos, carrito) => {
     let categoria = e.target.value
     let juegosFiltrados = categoria !== "todos" ? juegos.filter((juego) => juego.categoria === categoria) : juegos
-    crearTarjetaJuegos(juegosFiltrados,carrito)
-    
-}      
-let crearTarjetaJuegos = (juegos,carrito) => {
+    crearTarjetaJuegos(juegosFiltrados, carrito)
+
+}
+let crearTarjetaJuegos = (juegos, carrito) => {
     let containerJuegos = document.getElementById("container-juegos")
-    containerJuegos.innerHTML =""
+    containerJuegos.innerHTML = ""
     juegos.forEach((juego) => {
         let contenedainerJuegosTarjeta = document.createElement("div")
         contenedainerJuegosTarjeta.className = "container__juegos__tarjeta"
@@ -161,10 +205,10 @@ let crearTarjetaJuegos = (juegos,carrito) => {
             </div>
             <div class = "container__juegos__tarjeta__botoncontainer"><button class = "botonAgregarCarrito" id = agc${juego.id}>Agregar al carrito</button></div>
             `
-        containerJuegos.appendChild(contenedainerJuegosTarjeta) 
-        
-        let botonAgregarCarrito = document.getElementById("agc"+juego.id)
-        botonAgregarCarrito.addEventListener("click",(e) =>agregarJuegoCarrito(e,juegos,carrito))
+        containerJuegos.appendChild(contenedainerJuegosTarjeta)
+
+        let botonAgregarCarrito = document.getElementById("agc" + juego.id)
+        botonAgregarCarrito.addEventListener("click", (e) => agregarJuegoCarrito(e, juegos, carrito))
     })
 }
 main()

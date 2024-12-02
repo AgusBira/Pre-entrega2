@@ -167,6 +167,32 @@ nav .nav__buscador .nav__buscador__boton{
 .botonEliminarDelCarrito img{
     width: 60%;
 }
+.contenedor-botonFinalizarCompra{
+    background-color: #724C9D;
+    width: 100%;
+    display: flex;
+    gap: 100px;
+    justify-content: center;
+    align-items: center;
+}
+.contenedor-botonFinalizarCompra h3{
+    color: white;
+}
+.boton-finalizar-compra{
+    padding: 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    transition: 100ms;
+}
+.boton-finalizar-compra:hover{
+    transform: scale(1.05);
+}
+.boton-finalizar-compra:active{
+    transform: scale(1);
+    background-color: rgb(24, 225, 24);
+    color: white;
+}
 footer{
     text-align: center;
     background-color: #0B0205;
