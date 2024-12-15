@@ -52,7 +52,38 @@ nav .nav__buscador .nav__buscador__boton{
     border: solid 1px;
 }
 
+#botonCarrito:hover {
+    transform: scale(1.1);
+    transition: 200ms;
+}
+#botonCarrito:active{
+    transform: scale(1);
+    background-color: rgb(120, 254, 126);
+    transition: 200ms;
+}
+#botonHome:hover{
+    transform: scale(1.1);
+    transition: 200ms;
+}
+#botonHome:active{
+    transform: scale(1.1);
+    background-color: rgb(120, 254, 126);
+    transition: 200ms;
+}
 
+#botonVaciarCarrito img{
+    width: 20%;
+}
+#botonVaciarCarrito:hover{
+    transform: scale(1.1);
+    transition: 200ms;
+}
+#botonVaciarCarrito:active{
+    transform: scale(1);
+    background-color: red;
+    color: white;
+    transition: 200ms;
+}
 .container__juegos{
     background-color: #724C9D;
     padding: 20px;
@@ -167,7 +198,7 @@ nav .nav__buscador .nav__buscador__boton{
 .botonEliminarDelCarrito img{
     width: 60%;
 }
-.contenedor-botonFinalizarCompra{
+#contenedor-finalizar{
     background-color: #724C9D;
     width: 100%;
     display: flex;
@@ -175,7 +206,7 @@ nav .nav__buscador .nav__buscador__boton{
     justify-content: center;
     align-items: center;
 }
-.contenedor-botonFinalizarCompra h3{
+#contenedor-finalizar h3{
     color: white;
 }
 .boton-finalizar-compra{

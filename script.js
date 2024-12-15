@@ -1,14 +1,8 @@
-function main() {
-    let juegos = [
-        { id: 1123, nombre: "The Legend of Zelda: Breath of the Wild", precio: 100, stock: 3, categoria: "aventura", console: "Nintendo Switch", rutaimg: "img/tloztotk.jpg" },
-        { id: 2231, nombre: "Red Dead Redemption 2", precio: 100, stock: 3, categoria: "aventura", console: "PC/PS5/XBOX", rutaimg: "img/rdr2.jpeg" },
-        { id: 3334, nombre: "Call of Duty: Black ops 6", precio: 120, stock: 3, categoria: "shooter", console: "PC/PS5/XBOX", rutaimg: "img/codbo6.jpg" },
-        { id: 4516, nombre: "NBA 2K25", precio: 120, stock: 3, categoria: "deportes", console: "PC/PS5/XBOX", rutaimg: "img/nba2k25.jpg" },
-        { id: 1010, nombre: "Cities: Skylines", precio: 80, stock: 3, categoria: "simulacion", console: "PC/PS5/XBOX", rutaimg: "img/citiesskylines.jpg" },
-        { id: 1231, nombre: "Doom Eternal", precio: 80, stock: 3, categoria: "shooter", console: "PC/PS5/XBOX", rutaimg: "img/doometernal.jpeg" },
-        { id: 1246, nombre: "Farming Simulator 25", precio: 60, stock: 3, categoria: "simulacion", console: "PC/PS5/XBOX", rutaimg: "img/farmsimulator25.jpg" },
-        { id: 1241, nombre: "The Legend of Zelda: Tears of the Kingdom", precio: 120, stock: 3, categoria: "aventura", console: "Nintendo Switch", rutaimg: "img/tlozbotw.jpeg" }
-    ]
+fetch("./juegos.json")
+        .then(res => res.json())
+        .then(juegos => main(juegos))
+
+function main(juegos) {
     let carrito = obtenerCarritoDelStorage()
     renderizarCarrito(carrito)
     crearTarjetaJuegos(juegos, carrito)
@@ -35,7 +29,7 @@ function main() {
 }
 let precioFinalCarrito = (carrito) => {
     if (carrito.length != 0) {
-        arrayPrecios = carrito.map((juego) => juego.precio)
+        arrayPrecios = carrito.map((juego) => juego.subtotal)
         precioTotal = arrayPrecios.reduce((acum, precio) => acum + precio, 0)
     } else {
         precioTotal = 0
@@ -48,7 +42,11 @@ let finalizarCompra = () => {
     let precioFinal = document.getElementById("precioFinal")
     localStorage.removeItem("carrito")
     let carrito = obtenerCarritoDelStorage()
-    alert("Gracias por su compra, hasta luego!!")
+    Swal.fire({
+        title: 'Gracias por su compra',
+        icon: 'success',
+        confirmButtonText: 'Continuar'
+      })
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
     guardarCarritoEnStorage(carrito)
@@ -61,6 +59,11 @@ let vaciarCarrito = (e) => {
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
     precioFinal.innerHTML = "Precio final: " + "$  " + 0
+    Swal.fire({
+        title: 'Su carrito se vació!',
+        icon: 'success',
+        confirmButtonText: 'Continuar'
+      })
 }
 
 let guardarCarritoEnStorage = (carrito) => {
@@ -82,8 +85,6 @@ let agregarJuegoCarrito = (e, juegos) => {
     let id = Number(e.target.id.substring(3))
     let juegoOriginal = juegos.find((juego) => juego.id === id)
     let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
-    let unidadesTarjeta = document.getElementById("uni" + id)
-
     if (indiceCarrito === -1) {
         carrito.push({
             id: juegoOriginal.id,
@@ -91,21 +92,22 @@ let agregarJuegoCarrito = (e, juegos) => {
             precio: juegoOriginal.precio,
             unidades: 1,
             rutaimg: juegoOriginal.rutaimg,
-            stock: juegoOriginal.stock
+            stock: juegoOriginal.stock,
+            subtotal: juegoOriginal.precio
         })
         juegoOriginal.stock--
         console.log(juegoOriginal.stock)
-        //unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
     } else {
         juegoOriginal.stock--
-        console.log(juegoOriginal.stock)
+
         if (juegoOriginal.stock > 0) {
             carrito[indiceCarrito].unidades++
-            //unidadesTarjeta.innerHTML = `Unidades: ${juegoOriginal.stock}`
+            carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio*carrito[indiceCarrito].unidades
         } else {
             if (juegoOriginal.stock === 0) {
                 carrito[indiceCarrito].unidades++
-                //unidadesTarjeta.innerHTML = `No hay stock`
+                carrito[indiceCarrito].unidades++
+                carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio*carrito[indiceCarrito].unidades
             }
 
         }
@@ -117,7 +119,6 @@ let agregarJuegoCarrito = (e, juegos) => {
 }
 let renderizarCarrito = (carrito) => {
     let contendor = document.getElementById("carrito")
-    let precioFinal = document.getElementById("precioFinal")
     contendor.innerHTML = ""
     if (carrito.length === 0) {
         contendor.innerHTML = "<h2>Su carrito esta vacio!</h2>"
@@ -132,7 +133,7 @@ let renderizarCarrito = (carrito) => {
         </div>
         <p>${juego.id}</p>
         <p>${juego.unidades}</p>
-        <p>$${juego.precio}</p>
+        <p>$${juego.subtotal}</p>
         <button id = eli${juego.id} class = "botonEliminarDelCarrito"><img src="img/trash.svg" alt=""></button>
         `
         contendor.appendChild(tarjetaCarrito)
@@ -155,17 +156,17 @@ let mostrarCarrito = () => {
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "container__carrito"
-    contenedorFinalizar.className = "contenedor-botonFinalizarCompra"
+    contenedorFinalizar.className = "contenedor-finalizar"
     containerJuegos.className = "oculta"
 
 }
 let volverAHome = () => {
-    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
+    let contenedorFinalizar = document.getElementById("contenedor-finalizar")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "oculta"
-    containerJuegos.className = "container__juegos  "
-    botonFinalizarCompra.className = "oculta"
+    contenedorFinalizar.className = "oculta"
+    containerJuegos.className = "container__juegos"
 }
 let eliminarDelCarrito = (e) => {
     let carrito = obtenerCarritoDelStorage()
