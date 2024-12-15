@@ -161,7 +161,7 @@ let mostrarCarrito = () => {
 
 }
 let volverAHome = () => {
-    let contenedorFinalizar = document.getElementById("contenedor-finalizar")
+    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "oculta"
