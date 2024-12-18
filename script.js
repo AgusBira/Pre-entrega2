@@ -1,6 +1,11 @@
 fetch("./juegos.json")
-        .then(res => res.json())
-        .then(juegos => main(juegos))
+    .then(res => res.json())
+    .then(juegos => {
+        juegos.forEach(juego => {
+            juego.stockOriginal = juego.stock
+        })
+        main(juegos)
+    })
 
 function main(juegos) {
     let carrito = obtenerCarritoDelStorage()
@@ -20,10 +25,10 @@ function main(juegos) {
     selectorCategorias.addEventListener("change", (e) => filtroCategorias(e, juegos, carrito))
 
     let botonVaciarCarrito = document.getElementById("botonVaciarCarrito")
-    botonVaciarCarrito.addEventListener("click", vaciarCarrito)
+    botonVaciarCarrito.addEventListener("click",(e) => vaciarCarrito(juegos,e))
 
     let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
-    botonFinalizarCompra.addEventListener("click", finalizarCompra)
+    botonFinalizarCompra.addEventListener("click",(e)=> finalizarCompra(juegos,e))
 
 
 }
@@ -38,10 +43,11 @@ let precioFinalCarrito = (carrito) => {
 
 }
 
-let finalizarCompra = () => {
+let finalizarCompra = (juegos,e) => {
     let precioFinal = document.getElementById("precioFinal")
     localStorage.removeItem("carrito")
     let carrito = obtenerCarritoDelStorage()
+    juegos.forEach(juego => juego.stock = juego.stockOriginal)
     Swal.fire({
         title: 'Gracias por su compra',
         icon: 'success',
@@ -52,10 +58,11 @@ let finalizarCompra = () => {
     guardarCarritoEnStorage(carrito)
     precioFinal.innerHTML = "Precio final: " + "$  " + 0
 }
-let vaciarCarrito = (e) => {
+let vaciarCarrito = (juegos,e) => {
     let precioFinal = document.getElementById("precioFinal")
     localStorage.removeItem("carrito")
     carrito = obtenerCarritoDelStorage()
+    juegos.forEach(juego => juego.stock = juego.stockOriginal)
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
     precioFinal.innerHTML = "Precio final: " + "$  " + 0
@@ -84,6 +91,14 @@ let agregarJuegoCarrito = (e, juegos) => {
     let carrito = obtenerCarritoDelStorage()
     let id = Number(e.target.id.substring(3))
     let juegoOriginal = juegos.find((juego) => juego.id === id)
+    if (juegoOriginal.stock === 0) {
+        Swal.fire({
+            title: 'No hay más stock disponible!',
+            icon: 'warning',
+            confirmButtonText: 'Continuar'
+        })
+        return
+    }
     let indiceCarrito = carrito.findIndex((juego) => juego.id === id)
     if (indiceCarrito === -1) {
         carrito.push({
@@ -96,18 +111,21 @@ let agregarJuegoCarrito = (e, juegos) => {
             subtotal: juegoOriginal.precio
         })
         juegoOriginal.stock--
-        console.log(juegoOriginal.stock)
+        
     } else {
         juegoOriginal.stock--
-
         if (juegoOriginal.stock > 0) {
             carrito[indiceCarrito].unidades++
             carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio*carrito[indiceCarrito].unidades
         } else {
             if (juegoOriginal.stock === 0) {
                 carrito[indiceCarrito].unidades++
-                carrito[indiceCarrito].unidades++
                 carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio*carrito[indiceCarrito].unidades
+                Swal.fire({
+                    title: 'No hay más stock disponible!',
+                    icon: 'warning',
+                    confirmButtonText: 'Continuar'
+                  })
             }
 
         }
@@ -161,7 +179,7 @@ let mostrarCarrito = () => {
 
 }
 let volverAHome = () => {
-    let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
+    let contenedorFinalizar = document.getElementById("contenedor-finalizar")
     let carrito = document.getElementById("carrito")
     let containerJuegos = document.getElementById("container-juegos")
     carrito.className = "oculta"
