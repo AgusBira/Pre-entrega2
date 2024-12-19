@@ -12,6 +12,7 @@ function main(juegos) {
     renderizarCarrito(carrito)
     crearTarjetaJuegos(juegos, carrito)
     contadorCarrito()
+
     let botonHome = document.getElementById("botonHome")
     botonHome.addEventListener("click", volverAHome)
 
@@ -25,10 +26,10 @@ function main(juegos) {
     selectorCategorias.addEventListener("change", (e) => filtroCategorias(e, juegos, carrito))
 
     let botonVaciarCarrito = document.getElementById("botonVaciarCarrito")
-    botonVaciarCarrito.addEventListener("click",(e) => vaciarCarrito(juegos,e))
+    botonVaciarCarrito.addEventListener("click", (e) => vaciarCarrito(juegos, e))
 
     let botonFinalizarCompra = document.getElementById("botonFinalizarCompra")
-    botonFinalizarCompra.addEventListener("click",(e)=> finalizarCompra(juegos,e))
+    botonFinalizarCompra.addEventListener("click", (e) => finalizarCompra(juegos, e))
 
 
 }
@@ -43,7 +44,7 @@ let precioFinalCarrito = (carrito) => {
 
 }
 
-let finalizarCompra = (juegos,e) => {
+let finalizarCompra = (juegos, e) => {
     let precioFinal = document.getElementById("precioFinal")
     localStorage.removeItem("carrito")
     let carrito = obtenerCarritoDelStorage()
@@ -52,13 +53,13 @@ let finalizarCompra = (juegos,e) => {
         title: 'Gracias por su compra',
         icon: 'success',
         confirmButtonText: 'Continuar'
-      })
+    })
     renderizarCarrito(carrito)
     contadorCarrito(carrito)
     guardarCarritoEnStorage(carrito)
     precioFinal.innerHTML = "Precio final: " + "$  " + 0
 }
-let vaciarCarrito = (juegos,e) => {
+let vaciarCarrito = (juegos, e) => {
     let precioFinal = document.getElementById("precioFinal")
     localStorage.removeItem("carrito")
     carrito = obtenerCarritoDelStorage()
@@ -70,7 +71,7 @@ let vaciarCarrito = (juegos,e) => {
         title: 'Su carrito se vació!',
         icon: 'success',
         confirmButtonText: 'Continuar'
-      })
+    })
 }
 
 let guardarCarritoEnStorage = (carrito) => {
@@ -111,21 +112,21 @@ let agregarJuegoCarrito = (e, juegos) => {
             subtotal: juegoOriginal.precio
         })
         juegoOriginal.stock--
-        
+
     } else {
         juegoOriginal.stock--
         if (juegoOriginal.stock > 0) {
             carrito[indiceCarrito].unidades++
-            carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio*carrito[indiceCarrito].unidades
+            carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio * carrito[indiceCarrito].unidades
         } else {
             if (juegoOriginal.stock === 0) {
                 carrito[indiceCarrito].unidades++
-                carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio*carrito[indiceCarrito].unidades
+                carrito[indiceCarrito].subtotal = carrito[indiceCarrito].precio * carrito[indiceCarrito].unidades
                 Swal.fire({
                     title: 'No hay más stock disponible!',
                     icon: 'warning',
                     confirmButtonText: 'Continuar'
-                  })
+                })
             }
 
         }
